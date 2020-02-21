@@ -1,0 +1,13 @@
+---
+
+- name: Display hostname and OS
+  hosts: localhost
+  tasks:
+
+    - name: Display the hostname
+      debug:
+        msg: "The hostname is '{{ inventory_hostname }}"
+
+    - name: Display the OS
+      debug:
+        msg: "The OS is '{{ ansible_distribution }}'"

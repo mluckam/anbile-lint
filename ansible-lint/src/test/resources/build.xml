@@ -1,0 +1,25 @@
+<project name="ansible-lint" xmlns:unless="ant:unless">
+  <target name="run_ansible_lint">
+    <!-- check os -->
+    <condition property="executable" value="wsl" else="ansible-lint">
+      <os family="windows" />
+    </condition>
+    <condition property="ansible_lint" value="ansible-lint" else="">
+      <os family="windows" />
+    </condition>
+    <!-- get list of files -->
+    <fileset id="templates_fileset" dir="${playbooks_directory}" includes="**/*.yml" />
+    <pathconvert targetos="unix" property="templates" refid="templates_fileset" pathsep=" ">
+      <map from="C:" to="/mnt/c/" />
+    </pathconvert>
+    <!--execute ansible-lint -->
+    <exec executable="${executable}" failonerror="true">
+      <arg value="${ansible_lint}" unless:blank="${ansible_lint}" />
+      <!-- Adding this flag removes best practices check -->
+      <!--<arg value="-r" />-->
+      <arg value="${rules_directory}" />
+      <arg line="${templates}" />
+      <arg value="-v" />
+    </exec>
+  </target>
+</project>
